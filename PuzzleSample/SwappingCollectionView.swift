@@ -24,7 +24,7 @@ struct SwapDescription : Hashable {
     
     var hashValue: Int {
         get {
-            return (firstItem * 10) + secondItem
+            return firstItem + secondItem
         }
     }
 }
@@ -44,6 +44,7 @@ class SwappingCollectionView: UICollectionView {
     static let distanceDelta:CGFloat = 2
     var inter : IndexPath = []
     var pointCG : CGPoint?
+    
     override func beginInteractiveMovementForItem(at indexPath: IndexPath) -> Bool {
         
         self.interactiveIndexPath = indexPath
@@ -63,17 +64,13 @@ class SwappingCollectionView: UICollectionView {
     override func updateInteractiveMovementTargetPosition(_ targetPosition: CGPoint) {
         
         
-            if let hoverIndexPath = self.indexPathForItem(at: targetPosition), let interactiveIndexPath = self.interactiveIndexPath {
-                point = hoverIndexPath
-                pointCG = targetPosition
-                let swapDescription = SwapDescription(firstItem: interactiveIndexPath.item, secondItem: hoverIndexPath.item)
-                
-                if (!self.swapSet.contains(swapDescription)) {
-                
-                    self.swapSet.insert(swapDescription)
-                    
-                   
-                
+        if let hoverIndexPath = self.indexPathForItem(at: targetPosition), let interactiveIndexPath = self.interactiveIndexPath {
+            point = hoverIndexPath
+            pointCG = targetPosition
+            let swapDescription = SwapDescription(firstItem: interactiveIndexPath.item, secondItem: hoverIndexPath.item)
+            if (!self.swapSet.contains(swapDescription)) {
+                self.swapSet.insert(swapDescription)
+            
             }
         }
         
@@ -98,7 +95,6 @@ class SwappingCollectionView: UICollectionView {
     
     
     override func cancelInteractiveMovement() {
-        
      
         self.cleanup()
     }
